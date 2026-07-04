@@ -1,0 +1,6 @@
+node_modules
+kafra-vite/node_modules
+kafra-vite/dist
+.git
+.hermes/plans
+.env

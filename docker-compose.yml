@@ -1,0 +1,58 @@
+name: kafra-elysia
+
+services:
+  app:
+    container_name: kafra-app
+    image: kafra-elysia-app
+    build: .
+    env_file: .env
+    environment:
+      SHAULA_INTERNAL_VALIDATE_URL: http://shaula-sprintboot:8000/internal/validate
+    depends_on:
+      yggdrasill-postgress:
+        condition: service_healthy
+    volumes:
+      # Preserve existing data volume while project is renamed.
+      - danidrive_storage_data:/data/storage
+    restart: unless-stopped
+    networks:
+      - kafra_data_net
+
+  yggdrasill-postgress:
+    container_name: Yggdrasill-postgress
+    image: postgres:16-alpine
+    env_file: .env
+    volumes:
+      # Shared PostgreSQL data volume for Daniel's personal projects.
+      - yggdrasill_postgress_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - kafra_data_net
+
+  adminer:
+    container_name: kafra-adminer
+    image: adminer:4
+    depends_on:
+      - yggdrasill-postgress
+    environment:
+      ADMINER_DEFAULT_SERVER: yggdrasill-postgress
+    restart: unless-stopped
+    networks:
+      - kafra_data_net
+
+volumes:
+  danidrive_storage_data:
+    external: true
+  yggdrasill_postgress_data:
+    external: true
+    name: Yggdrasill-postgress
+
+networks:
+  kafra_data_net:
+    name: kafra_data_net
+    driver: bridge
