@@ -34,17 +34,6 @@ services:
     networks:
       - kafra_data_net
 
-  adminer:
-    container_name: kafra-adminer
-    image: adminer:4
-    depends_on:
-      - yggdrasill-postgress
-    environment:
-      ADMINER_DEFAULT_SERVER: yggdrasill-postgress
-    restart: unless-stopped
-    networks:
-      - kafra_data_net
-
 volumes:
   danidrive_storage_data:
     external: true

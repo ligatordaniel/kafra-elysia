@@ -7,7 +7,6 @@ Kafra es una app privada para administrar archivos en la VPS.
 - Backend: Bun + Elysia + TypeScript
 - Frontend: React + Vite + TypeScript (`kafra-vite`)
 - DB: PostgreSQL 16
-- Panel DB temporal: Adminer en `/db/`
 - Reverse proxy: Nginx Docker (`edge-nginx`)
 
 ## Arranque
@@ -17,7 +16,6 @@ docker compose up -d --build
 ```
 
 - App: http://TU_SERVIDOR:8089
-- DB/Adminer: http://TU_SERVIDOR:8089/db/
 
 ## Desarrollo frontend
 
